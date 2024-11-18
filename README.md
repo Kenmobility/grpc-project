@@ -27,8 +27,3 @@ make test
 ```bash
 make
 ```
-## 4 Use Evans cli to test gRPC request
-- run 'make evans' to run application
-```bash
-make evans
-```
