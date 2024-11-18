@@ -11,7 +11,7 @@ COPY . .
 
 RUN go test -v ./...
 
-RUN go build -o main ./cmd
+RUN go build -o main .
 
 # Run stage
 FROM alpine:3.20
