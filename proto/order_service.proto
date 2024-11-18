@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package pb; 
+
+import "order.proto";
+
+option go_package = "github.com/kenmobility/grpc-project/pb";
+
+service OrderService {
+    rpc CreateOrder (CreateOrderRequest) returns (CreateOrderResponse) {}
+    rpc GetOrder (GetOrderRequest) returns (GetOrderResponse) {}
+}

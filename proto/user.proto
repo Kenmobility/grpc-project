@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package pb; 
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/kenmobility/grpc-project/pb";
+
+message User {
+    string user_id = 1;
+    string email = 2;
+    string full_name = 3;
+    google.protobuf.Timestamp created_at = 4;
+}
+
+message CreateUserRequest {
+    string email = 1;
+    string full_name = 2;
+    string password = 3;
+}
+
+message CreateUserResponse {
+    User user = 1;
+}
+
+message GetUserRequest {
+    string user_id = 1;
+}
+
+message GetUserResponse {
+    User user = 1;
+}
+

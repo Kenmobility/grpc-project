@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package pb; 
+
+import "user.proto";
+
+option go_package = "github.com/kenmobility/grpc-project/pb";
+
+service UserService {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse) {}
+    rpc GetUser (GetUserRequest) returns (GetUserResponse) {}
+}
