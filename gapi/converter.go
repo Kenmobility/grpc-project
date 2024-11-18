@@ -8,9 +8,29 @@ import (
 
 func convertUser(user models.User) *pb.User {
 	return &pb.User{
-		UserId:    user.PublicID,
+		UserId:    int32(user.ID),
+		PublicId:  user.PublicID,
 		Email:     user.Email,
 		FullName:  user.FullName,
 		CreatedAt: timestamppb.New(user.CreatedAt),
+	}
+}
+
+func convertOrder(order models.Order) *pb.Order {
+	return &pb.Order{
+		OrderId:   int32(order.ID),
+		PublicId:  order.PublicID,
+		Status:    order.Status,
+		CreatedAt: timestamppb.New(order.CreatedAt),
+	}
+}
+
+func convertFromPbUser(pbUser *pb.User) *models.User {
+	return &models.User{
+		ID:        uint(pbUser.UserId),
+		PublicID:  pbUser.PublicId,
+		Email:     pbUser.Email,
+		FullName:  pbUser.FullName,
+		CreatedAt: pbUser.CreatedAt.AsTime().Local(),
 	}
 }

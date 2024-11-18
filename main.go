@@ -44,15 +44,17 @@ func runGrpcServer(config config.Config, store repo.StoreRepository) {
 	// Enable reflection
 	reflection.Register(grpcServer)
 
-	listener, err := net.Listen("tcp", config.GRPCServerAddress)
+	listener, err := net.Listen("tcp", ":9090")
 	if err != nil {
 		log.Fatal("cannot create listener: ", err)
 	}
 
 	pb.RegisterUserServiceServer(grpcServer, server)
-	//pb.RegisterOrderServiceServer(grpcServer, server)
+	pb.RegisterOrderServiceServer(grpcServer, server)
 
 	log.Printf("start gRPC server at %s", listener.Addr().String())
+
+	//fmt.Printf("Services: %v", grpcServer.GetServiceInfo())
 
 	err = grpcServer.Serve(listener)
 	if err != nil {

@@ -2,6 +2,7 @@ package gapi
 
 import (
 	"context"
+	"strings"
 
 	"github.com/kenmobility/grpc-project/helpers"
 	"github.com/kenmobility/grpc-project/models/dto"
@@ -12,6 +13,18 @@ import (
 )
 
 func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest) (*pb.CreateUserResponse, error) {
+	if strings.TrimSpace(req.Email) == "" {
+		return nil, status.Error(codes.InvalidArgument, "email is required")
+	}
+
+	if strings.TrimSpace(req.FullName) == "" {
+		return nil, status.Error(codes.InvalidArgument, "full_name is required")
+	}
+
+	if strings.TrimSpace(req.Password) == "" {
+		return nil, status.Error(codes.InvalidArgument, "password is required")
+	}
+
 	hashedPassword, err := helpers.HashPassword(req.GetPassword())
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to hash password: %s", err)

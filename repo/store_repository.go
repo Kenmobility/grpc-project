@@ -11,9 +11,9 @@ import (
 
 type StoreRepository interface {
 	CreateUser(ctx context.Context, req dto.CreateUserParams) (*models.User, error)
-	GetUser(ctx context.Context, userId string) (*models.User, error)
-	CreateOrder(ctx context.Context, user models.User) (*models.Order, error)
-	GetOrder(ctx context.Context, orderId string) (*models.Order, error)
+	GetUserByPublicID(ctx context.Context, publicId string) (*models.User, error)
+	CreateOrder(ctx context.Context, user_id int) (*models.Order, error)
+	GetOrderByPublicID(ctx context.Context, orderId string) (*models.Order, error)
 }
 
 type GormStoreRepository struct {
@@ -37,37 +37,36 @@ func (r *GormStoreRepository) CreateUser(ctx context.Context, req dto.CreateUser
 	return &user, nil
 }
 
-func (r *GormStoreRepository) GetUser(ctx context.Context, userId string) (*models.User, error) {
+func (r *GormStoreRepository) GetUserByPublicID(ctx context.Context, userId string) (*models.User, error) {
 	var user models.User
 
 	if err := r.db.Where("public_id = ?", userId).First(&user).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return nil, nil
+			return nil, err
 		}
 		return nil, err
 	}
 	return &user, nil
 }
 
-func (r *GormStoreRepository) CreateOrder(ctx context.Context, user models.User) (*models.Order, error) {
+func (r *GormStoreRepository) CreateOrder(ctx context.Context, user_id int) (*models.Order, error) {
 	order := models.Order{
 		Status:    "new",
-		UserId:    uint(user.ID),
-		User:      &user,
+		UserId:    uint(user_id),
 		CreatedAt: time.Now(),
 	}
-	if err := r.db.Create(order).Error; err != nil {
+	if err := r.db.Create(&order).Error; err != nil {
 		return nil, err
 	}
 	return &order, nil
 }
 
-func (r *GormStoreRepository) GetOrder(ctx context.Context, orderId string) (*models.Order, error) {
+func (r *GormStoreRepository) GetOrderByPublicID(ctx context.Context, publicId string) (*models.Order, error) {
 	var order models.Order
 
-	if err := r.db.Where("public_id = ?", orderId).First(&order).Error; err != nil {
+	if err := r.db.Where("public_id = ?", publicId).First(&order).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			return nil, nil
+			return nil, err
 		}
 		return nil, err
 	}

@@ -8,7 +8,7 @@ import (
 
 // Server serves gRPC requests.
 type Server struct {
-	//pb.UnimplementedOrderServiceServer
+	pb.UnimplementedOrderServiceServer
 	pb.UnimplementedUserServiceServer
 	config config.Config
 	store  repo.StoreRepository
